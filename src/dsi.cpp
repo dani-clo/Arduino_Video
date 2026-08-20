@@ -29,7 +29,7 @@ static const struct device *mipi_dsi_dev;
 
 struct display_capabilities display_caps;
 
-int dsi_init(uint8_t bus, struct edid *edid, struct display_timing *dt) {
+int dsi_init([[maybe_unused]]uint8_t bus, [[maybe_unused]]struct edid *edid, struct display_timing *dt) {
   int ret;
 
   /* Get LTDC device */
@@ -66,11 +66,10 @@ int dsi_init(uint8_t bus, struct edid *edid, struct display_timing *dt) {
   ANX_LOG_INFO("dsi_init: MIPI-DSI device ready");
 
   /* Configure MIPI-DSI device parameters */
-  struct mipi_dsi_device mdev = {
-    .data_lanes = 2,
-    .pixfmt = MIPI_DSI_PIXFMT_RGB565,
-    .mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST | MIPI_DSI_MODE_LPM,
-  };
+  struct mipi_dsi_device mdev = {};
+  mdev.data_lanes = 2;
+  mdev.pixfmt = MIPI_DSI_PIXFMT_RGB565;
+  mdev.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST | MIPI_DSI_MODE_LPM;
 
   /* Set timing from display_timing struct */
   mdev.timings.hactive = dt->hactive;
@@ -95,7 +94,7 @@ int dsi_init(uint8_t bus, struct edid *edid, struct display_timing *dt) {
   ANX_LOG_INFO("dsi_init: mipi_dsi_attach success");
 
   /* Turn off blanking (enable display output) */
-  int blank_ret = display_blanking_off(display_dev);
+  [[maybe_unused]] int blank_ret = display_blanking_off(display_dev);
   ANX_LOG_INFO("dsi_init: display_blanking_off returned %d", blank_ret);
 
   dsi_lcdClear(0x00);
@@ -157,7 +156,7 @@ void dsi_lcdFillArea(void *pDst, uint32_t xSize, uint32_t ySize, uint32_t ColorM
   }
 }
 
-void dsi_lcdDrawImage(void *pSrc, void *pDst, uint32_t xSize, uint32_t ySize, uint32_t ColorMode) {
+void dsi_lcdDrawImage(void *pSrc, void *pDst, uint32_t xSize, uint32_t ySize, [[maybe_unused]]uint32_t ColorMode) {
   uint16_t *src = (uint16_t *)pSrc;
   uint16_t *dst = (uint16_t *)pDst;
 
@@ -172,7 +171,7 @@ void dsi_lcdDrawImage(void *pSrc, void *pDst, uint32_t xSize, uint32_t ySize, ui
   }
 }
 
-void dsi_configueCLUT(uint32_t *colors) {
+void dsi_configueCLUT([[maybe_unused]]uint32_t *colors) {
   /* CLUT not used in Zephyr display API with RGB565 */
 }
 
@@ -188,12 +187,11 @@ void dsi_drawCurrentFrameBuffer(bool reload) {
     return;
   }
 
-  struct display_buffer_descriptor desc = {
-    .buf_size = fb_size,
-    .width = display_caps.x_resolution,
-    .height = display_caps.y_resolution,
-    .pitch = display_caps.x_resolution,
-  };
+  struct display_buffer_descriptor desc = {};
+  desc.buf_size = fb_size;
+  desc.width = display_caps.x_resolution;
+  desc.height = display_caps.y_resolution;
+  desc.pitch = display_caps.x_resolution;
 
   uint8_t *back = (uint8_t *)dsi_getCurrentFrameBuffer();
 

@@ -112,7 +112,7 @@ static int
 detailed_cvt_descriptor(unsigned char *x, int first)
 {
 	const unsigned char empty[3] = { 0, 0, 0 };
-	static const char *names[] = { "50", "60", "75", "85" };
+	[[maybe_unused]] static const char *names[] = { "50", "60", "75", "85" };
 	int width = 0, height = 0;
 	int valid = 1;
 	int fifty = 0, sixty = 0, seventyfive = 0, eightyfive = 0, reduced = 0;
@@ -625,7 +625,7 @@ do_checksum(unsigned char *x)
 
 /* CEA extension */
 
-static const char *
+[[maybe_unused]] static const char *
 audio_format(unsigned char x)
 {
 	switch (x) {
@@ -903,8 +903,8 @@ cea_block(struct edid *out, unsigned char *x)
 		break;
 	default:
 	{
-		int tag = (*x & 0xe0) >> 5;
-		int length = *x & 0x1f;
+		[[maybe_unused]] int tag = (*x & 0xe0) >> 5;
+		[[maybe_unused]] int length = *x & 0x1f;
 		ANX_LOG_DBG(
 			"  Unknown tag %d, length %d (raw %02x)",
 			tag, length, *x);
@@ -972,7 +972,7 @@ parse_cea(struct edid *out, unsigned char *x, struct edid_context *c)
 /* generic extension code */
 
 static void
-extension_version(struct edid *out, unsigned char *x)
+extension_version([[maybe_unused]] struct edid *out, [[maybe_unused]] unsigned char *x)
 {
 	ANX_LOG_DBG( "Extension version: %d", x[1]);
 }
@@ -1042,7 +1042,7 @@ static const struct {
 	{1152, 870, 75},
 };
 
-static void print_subsection(const char *name, unsigned char *edid, int start,
+static void print_subsection(const char *name, [[maybe_unused]]unsigned char *edid, int start,
 			     int end)
 {
 	int i;
@@ -1320,12 +1320,12 @@ int decode_edid(unsigned char *edid, int size, struct edid *out)
 		       edid[0x15], edid[0x16]);
 	} else if (c.claims_one_point_four && (edid[0x15] || edid[0x16])) {
 		if (edid[0x15]) { /* edid[0x15] != 0 && edid[0x16] == 0 */
-			unsigned int ratio = 100000/(edid[0x15] + 99);
+			[[maybe_unused]] unsigned int ratio = 100000/(edid[0x15] + 99);
 			ANX_LOG_DBG(
 				"Aspect ratio is %u.%03u (landscape)",
 				ratio / 1000, ratio % 1000);
 		} else { /* edid[0x15] == 0 && edid[0x16] != 0 */
-			unsigned int ratio = 100000/(edid[0x16] + 99);
+			[[maybe_unused]] unsigned int ratio = 100000/(edid[0x16] + 99);
 			ANX_LOG_DBG(
 				"Aspect ratio is %u.%03u (portrait)",
 				ratio / 1000, ratio % 1000);
