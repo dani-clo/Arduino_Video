@@ -47,7 +47,7 @@ void lvgl_displayFlushing(lv_display_t *display, const lv_area_t *area, unsigned
 /* Note: These variables are defined in the global scope because the LVGL
  *       'lvgl_displayFlushing' callback is a static function */
 const struct device *display_dev;
-struct display_capabilities display_caps = { 0 };
+struct display_capabilities display_caps = {};
 static struct display_buffer_descriptor desc = {
   .buf_size = 0,
   .width = 0,
@@ -214,19 +214,19 @@ void Arduino_Video::endDraw() {
 }
 
 void Arduino_Video::clear() {
-  uint32_t bg = ArduinoGraphics::background();
-  uint32_t x_size, y_size;
+  [[maybe_unused]] uint32_t bg = ArduinoGraphics::background();
+  [[maybe_unused]] uint32_t x_size, y_size;
 
 #if defined(ARDUINO_GIGA) && defined(__ZEPHYR__)
   uint16_t *fb = (uint16_t *)display_get_framebuffer(display_dev);
   memset(fb, 0, display_caps.x_resolution * display_caps.y_resolution * 2);
 #else
   if (_rotated) {
-    x_size = (height() <= dsi_getDisplayXSize()) ? height() : dsi_getDisplayXSize();
-    y_size = (width() <= dsi_getDisplayYSize()) ? width() : dsi_getDisplayYSize();
+    x_size = ((uint32_t)height() <= dsi_getDisplayXSize()) ? height() : dsi_getDisplayXSize();
+    y_size = ((uint32_t)width() <= dsi_getDisplayYSize()) ? width() : dsi_getDisplayYSize();
   } else {
-    x_size = (width() <= dsi_getDisplayXSize()) ? width() : dsi_getDisplayXSize();
-    y_size = (height() <= dsi_getDisplayYSize()) ? height() : dsi_getDisplayYSize();
+    x_size = ((uint32_t)width() <= dsi_getDisplayXSize()) ? width() : dsi_getDisplayXSize();
+    y_size = ((uint32_t)height() <= dsi_getDisplayYSize()) ? height() : dsi_getDisplayYSize();
   }
 
   dsi_lcdFillArea((void *)(dsi_getCurrentFrameBuffer()), x_size, y_size, bg);
@@ -240,13 +240,13 @@ void Arduino_Video::set(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
     x_rot = ((height() - 1) - y);
     y_rot = x;
 
-    if (x_rot >= height() || y_rot >= width())
+    if (x_rot >= (uint32_t)height() || y_rot >= (uint32_t)width())
       return;
   } else {
     x_rot = x;
     y_rot = y;
 
-    if (x_rot >= width() || y_rot >= height())
+    if (x_rot >= (uint32_t)width() || y_rot >= (uint32_t)height())
       return;
   }
 
@@ -323,7 +323,7 @@ void lvgl_displayFlushing(lv_display_t *disp, const lv_area_t *area, unsigned ch
 }
 #endif  //end lvgl
 
-int Arduino_Video::drawBuffer(uint16_t x, uint16_t y, const void *buf) {
+int Arduino_Video::drawBuffer([[maybe_unused]]uint16_t x, [[maybe_unused]]uint16_t y, [[maybe_unused]]const void *buf) {
 #if defined(ARDUINO_GIGA) && defined(__ZEPHYR__)
   if (!device_is_ready(display_dev)) {
     return -ENODEV;

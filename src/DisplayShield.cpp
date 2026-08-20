@@ -18,11 +18,11 @@ extern "C" {
 }
 
 #if defined(ARDUINO_GIGA) && defined(__ZEPHYR__)
-int GigaDisplayShieldClass::init(int edidmode) {
+int GigaDisplayShieldClass::init([[maybe_unused]]int edidmode) {
   return 0;
 }
 
-int GigaDisplayShieldClass::getEdidMode(int h, int v) {
+int GigaDisplayShieldClass::getEdidMode([[maybe_unused]]int h, [[maybe_unused]] int v) {
   return EDID_MODE_480x800_60Hz;
 }
 

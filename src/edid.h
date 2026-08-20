@@ -30,8 +30,14 @@
 #define CONFIG(x)				(0)
 #define mdelay(x)				delay(x)
 #define die(...)					
+
+#ifndef MIN
 #define MIN(x, y)				((x) < (y) ? (x) : (y))
+#endif // MIN
+
+#ifndef MAX
 #define MAX(x, y)				((x) > (y) ? (x) : (y))
+#endif
 
 #include <stdbool.h>
 #include "api/Common.h"

@@ -617,7 +617,7 @@ int anx7625_get_hpd_event(uint8_t bus)  {
  * internal firmware(OCM). To avoid the race condition, AP should access the
  * reserved slave address before slave address changes.
  */
-int i2c_access_workaround(uint8_t bus, uint8_t saddr) {
+int i2c_access_workaround([[maybe_unused]]uint8_t bus, uint8_t saddr) {
 	uint8_t offset;
 	static uint8_t saddr_backup = 0;
 	int ret = 0;
@@ -1256,7 +1256,7 @@ int sp_tx_edid_read(uint8_t bus, uint8_t *pedid_blocks_buf, uint32_t size) {
 	return blocks_num;
 }
 
-void anx7625_disable_pd_protocol(uint8_t bus) {
+[[maybe_unused]] void anx7625_disable_pd_protocol(uint8_t bus) {
 	int ret;
 
 	/* reset main ocm */
