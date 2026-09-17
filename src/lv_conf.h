@@ -102,7 +102,21 @@
     #define LV_DRAW_SW_DRAW_UNIT_CNT    1
 
     /* Use Arm-2D to accelerate the sw render */
-    #define LV_USE_DRAW_ARM2D_SYNC      1
+    #define LV_USE_DRAW_ARM2D_SYNC      0
+
+    /* Only build the color format converters actually needed by this library's
+     * examples (RGB565 display only). */
+    #define LV_DRAW_SW_SUPPORT_RGB565                  1
+    #define LV_DRAW_SW_SUPPORT_RGB565_SWAPPED          0
+    #define LV_DRAW_SW_SUPPORT_RGB565A8                0
+    #define LV_DRAW_SW_SUPPORT_RGB888                  0
+    #define LV_DRAW_SW_SUPPORT_XRGB8888                0
+    #define LV_DRAW_SW_SUPPORT_ARGB8888                0
+    #define LV_DRAW_SW_SUPPORT_ARGB8888_PREMULTIPLIED  0
+    #define LV_DRAW_SW_SUPPORT_L8                      0
+    #define LV_DRAW_SW_SUPPORT_AL88                    0
+    #define LV_DRAW_SW_SUPPORT_A8                      0
+    #define LV_DRAW_SW_SUPPORT_I1                      0
 
     /* If a widget has `style_opa < 255` (not `bg_opa`, `text_opa` etc) or not NORMAL blend mode
      * it is buffered into a "simple" layer before rendering. The widget can be buffered in smaller chunks.
