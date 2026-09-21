@@ -100,8 +100,10 @@ int Arduino_Video::begin() {
   display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 
   if (!device_is_ready(display_dev)) {
-    printk("\t<err> Zephyr Display Not Ready!...");
-    return 3;
+    if (zephyr::arduino::init_dev_apply_pinctrl(display_dev) < 0) {
+      printk("\t<err> Zephyr Display Initialization Failed!...");
+      return 3;
+    }
   }
 
   display_get_capabilities(display_dev, &display_caps);
