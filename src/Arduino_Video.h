@@ -104,7 +104,6 @@ public:
    */
   void *getFramebuffer();
 
-#if defined(__ZEPHYR__)
   /**
    * @brief Set the frame descriptor for the display.
    *
@@ -114,7 +113,6 @@ public:
    * @param buf_size The size of the data buffer in bytes.
    */
   void setFrameDesc(uint16_t w, uint16_t h, uint16_t pitch, uint32_t buf_size);
-#endif
 #ifdef ARDUINO_VIDEO_HAS_GRAPHICS
   /**
    * @brief Clear the display.

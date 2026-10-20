@@ -9,8 +9,6 @@
 
 */
 
-#ifdef __ZEPHYR__
-
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
@@ -161,5 +159,3 @@ void platformLvglStartTick(void) {
 #endif
 #endif
 }
-
-#endif /* __ZEPHYR__ */

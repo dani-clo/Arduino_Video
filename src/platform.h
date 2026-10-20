@@ -26,7 +26,7 @@
 #define ARDUINO_VIDEO_HAS_GRAPHICS
 #endif
 
-#if defined(__ZEPHYR__) && defined(CONFIG_INPUT_GT911)
+#if defined(CONFIG_INPUT_GT911)
 #define ARDUINO_VIDEO_HAS_TOUCH
 #endif
 

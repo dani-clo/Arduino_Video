@@ -17,7 +17,6 @@ extern "C" {
 #include "video_modes.h"
 }
 
-#if defined(ARDUINO_GIGA) && defined(__ZEPHYR__)
 int GigaDisplayShieldClass::init([[maybe_unused]]int edidmode) {
   return 0;
 }
@@ -31,7 +30,6 @@ int GigaDisplayShieldClass::getStatus() {
 }
 
 GigaDisplayShieldClass GigaDisplayShield;
-#endif /* ARDUINO_GIGA && __ZEPHYR__ */
 
 int USBCVideoClass::init(int edidmode) {
   struct edid recognized_edid;

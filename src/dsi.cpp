@@ -9,7 +9,7 @@
 
 */
 
-#if defined(__ZEPHYR__) && !defined(ARDUINO_GIGA)
+#if !defined(ARDUINO_GIGA)
 
 #include <Arduino.h>
 #include <zephyr/kernel.h>
@@ -204,4 +204,4 @@ void dsi_drawCurrentFrameBuffer(bool reload) {
   // pend_buf and waits for the vsync ISR to swap it with front_buf.
   display_write(display_dev, 0, 0, &desc, (void *)back);
 }
-#endif /* __ZEPHYR__ */
+#endif /* !ARDUINO_GIGA */

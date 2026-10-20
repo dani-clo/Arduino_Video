@@ -23,9 +23,6 @@
 #define u8 uint8_t
 #define u16 uint16_t
 #define u32 uint32_t
-#if !defined(__ZEPHYR__) 
-	#define printk(x, ...)
-#endif
 #define console_log_level(x)	(1)
 #define CONFIG(x)				(0)
 #define mdelay(x)				delay(x)
