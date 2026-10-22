@@ -105,6 +105,17 @@ int Arduino_Video::begin() {
   }
 
   display_get_capabilities(display_dev, &display_caps);
+
+#if CONFIG_STM32_LTDC_FB_NUM > 0
+  // Save the allocation base before USB-C initialization swaps front and back.
+  _framebufferBase = static_cast<uint8_t *>(display_get_framebuffer(display_dev));
+  _framebufferSize = display_caps.x_resolution * display_caps.y_resolution * sizeof(uint16_t);
+  if (_framebufferBase == nullptr) {
+    return 2;
+  }
+  // Initialize every buffer, including borders outside the camera image.
+  memset(_framebufferBase, 0, CONFIG_STM32_LTDC_FB_NUM * _framebufferSize);
+#endif
 #endif
 
 #if defined(ARDUINO_GIGA)
@@ -347,6 +358,18 @@ void *Arduino_Video::getFramebuffer() {
     return nullptr;
   }
   return display_get_framebuffer(display_dev);
+}
+
+void *Arduino_Video::getDrawBuffer() {
+  void *front = getFramebuffer();
+#if CONFIG_STM32_LTDC_FB_NUM == 2
+  if (front == nullptr || _framebufferBase == nullptr) {
+    return nullptr;
+  }
+  return front == _framebufferBase ? _framebufferBase + _framebufferSize : _framebufferBase;
+#else
+  return front;
+#endif
 }
 
 void Arduino_Video::setFrameDesc(uint16_t w, uint16_t h, uint16_t pitch, uint32_t buf_size) {

@@ -98,11 +98,24 @@ public:
   int drawBuffer(uint16_t x, uint16_t y, const void *buf);
 
   /**
-   * @brief Get a pointer to the framebuffer.
+   * @brief Get a pointer to the framebuffer currently being displayed.
    *
    * @return void* A pointer to the framebuffer, or nullptr if the framebuffer is not available.
    */
   void *getFramebuffer();
+
+  /**
+   * @brief Get a buffer for drawing a complete frame in native display coordinates.
+   *
+   * With two configured LTDC framebuffers, returns the buffer that is not being
+   * displayed. With one framebuffer, falls back to getFramebuffer().
+   * Submit the returned buffer with drawBuffer(0, 0, buf) using a full-screen
+   * frame descriptor, then call getDrawBuffer() again for the next frame.
+   * Previous frame contents are not copied into the draw buffer.
+   *
+   * @return void* The draw buffer, or nullptr if unavailable.
+   */
+  void *getDrawBuffer();
 
   /**
    * @brief Set the frame descriptor for the display.
@@ -146,6 +159,8 @@ private:
   int _edidMode;
   uint32_t _width;
   uint32_t _height;
+  uint8_t *_framebufferBase = nullptr;
+  uint32_t _framebufferSize = 0;
 };
 
 #endif /* _ARDUINO_VIDEO_H */
